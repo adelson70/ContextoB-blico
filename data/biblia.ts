@@ -1,3 +1,21 @@
+/**
+ * Valida se o livro e capítulo existem na lista de livros e capítulos da bíblia.
+ * @param livroNome Nome do livro (ex: "João")
+ * @param capitulo Capítulo como string ou número
+ * @returns { slug: string, abrev: string, capitulo: number } se válido, ou null se inválido
+ */
+export function validateBookAndChapter(livroNome: string, capitulo: string | number): { slug: string, abrev: string, capitulo: number } | null {
+  const nomeNormalizado = livroNome.trim().toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
+  const livro = livros.find(l =>
+    l.name.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "") === nomeNormalizado
+    || l.abrev.toLowerCase() === nomeNormalizado
+    || l.slug.toLowerCase() === nomeNormalizado
+  );
+  if (!livro) return null;
+  const capNum = typeof capitulo === "string" ? parseInt(capitulo, 10) : capitulo;
+  if (isNaN(capNum) || capNum < 1 || capNum > livro.cap) return null;
+  return { slug: livro.slug, abrev: livro.abrev, capitulo: capNum };
+}
 import bibliaNVI from '@/data/biblia-nvi.json'
 
 interface LivroBiblia {
@@ -104,3 +122,4 @@ export const getVersiculos = (livroSlug: string, capitulo: string): string[] | n
 
     return livroEncontrado.chapters[capituloNum - 1];
 }
+

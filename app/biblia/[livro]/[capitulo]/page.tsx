@@ -8,12 +8,20 @@ interface BibliaPageProps {
 
 
 
-export default function BibliaDisplayPage({ params }: BibliaPageProps) {
-  const { livro, capitulo } = params;
+export default async function BibliaDisplayPage({ params }: BibliaPageProps) {
+  const { livro, capitulo } = await params;
   const valid = validateBookAndChapter(livro, capitulo);
   if (!valid) return notFound();
   const versiculos = getVersiculos(valid.slug, capitulo);
   if (!versiculos) return notFound();
+
+  // Busca comentários e referências de todos os versículos em paralelo
+  const comentarios = await Promise.all(
+    versiculos.map((_, i) => getComentario(valid.slug, String(valid.capitulo), String(i + 1)))
+  );
+  const referencias = await Promise.all(
+    versiculos.map((_, i) => getReferencias(valid.slug, String(valid.capitulo), String(i + 1)))
+  );
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-background p-4">
@@ -27,19 +35,15 @@ export default function BibliaDisplayPage({ params }: BibliaPageProps) {
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
         }}
       >
-        {versiculos.map((v, i) => {
-          // Busca referências reais para cada versículo
-          const referencias = getReferencias(valid.slug, String(valid.capitulo), String(i + 1));
-          return (
-            <VerseBlock
-              key={i}
-              number={i + 1}
-              text={v}
-              comment={getComentario(valid.slug, String(valid.capitulo), String(i + 1)) || undefined}
-              reference={referencias ? referencias.join('; ') : undefined}
-            />
-          );
-        })}
+        {versiculos.map((v, i) => (
+          <VerseBlock
+            key={i}
+            number={i + 1}
+            text={v}
+            comment={comentarios[i] || undefined}
+            reference={referencias[i] ? referencias[i]?.join('; ') : undefined}
+          />
+        ))}
       </div>
     </div>
   );

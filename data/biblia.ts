@@ -1,34 +1,16 @@
-// Comentários mocados centralizados para múltiplos versículos
-const comentariosMock: Record<string, Record<string, Record<string, string>>> = {
-  joao: {
-    '3': {
-      '1': 'Comentário do versículo 1.',
-      '3': 'Nota especial sobre o versículo 3.',
-      '16': 'Comentário detalhado sobre João 3:16, explicando o amor de Deus e o sacrifício de Jesus Cristo.',
-    }
-  },
-  genesis: {
-    '1': {
-      '1': 'Comentário sobre Gênesis 1:1.'
-    }
-  }
-};
+import { getComentarioByVersiculo } from '@/services/comentarioService';
+import { getReferenciaByVersiculo } from '@/services/referenciaService';
 
 /**
- * Retorna comentário para um versículo específico (mock).
+ * Busca comentário no banco de dados para um versículo específico.
  * @param livroSlug slug do livro (ex: 'joao')
  * @param capitulo número do capítulo como string (ex: '3')
  * @param versiculo número do versículo como string (ex: '16')
  * @returns comentário ou null se não houver
  */
-export function getComentario(livroSlug: string, capitulo: string, versiculo: string): string | null {
-  const livro = comentariosMock[livroSlug];
-  if (!livro) return null;
-  const cap = livro[capitulo];
-  if (!cap) return null;
-  const comentario = cap[versiculo];
-  if (!comentario) return null;
-  return comentario;
+export async function getComentario(livroSlug: string, capitulo: string, versiculo: string): Promise<string | null> {
+  const comentario = await getComentarioByVersiculo(livroSlug, Number(capitulo), Number(versiculo));
+  return comentario?.texto || null;
 }
 /**
  * Valida se o livro e capítulo existem na lista de livros e capítulos da bíblia.
@@ -48,6 +30,7 @@ export function validateBookAndChapter(livroNome: string, capitulo: string | num
   if (isNaN(capNum) || capNum < 1 || capNum > livro.cap) return null;
   return { slug: livro.slug, abrev: livro.abrev, capitulo: capNum, nomeBonito: livro.name };
 }
+
 import bibliaNVI from '@/data/biblia-nvi.json'
 
 interface LivroBiblia {
@@ -155,50 +138,17 @@ export const getVersiculos = (livroSlug: string, capitulo: string): string[] | n
     return livroEncontrado.chapters[capituloNum - 1];
 }
 
-// Dados mocados de referências cruzadas para múltiplos versículos
-const referenciasMock: Record<string, Record<string, Record<string, string[]>>> = {
-  joao: {
-    '3': {
-      '16': [
-        'João 1:1',
-        'Romanos 5:8',
-        '1 João 4:9-10'
-      ],
-      '17': [
-        'João 12:47',
-        '1 Timóteo 2:4'
-      ]
-    },
-    '1': {
-      '1': [
-        'Gênesis 1:1',
-        'Colossenses 1:17'
-      ]
-    }
-  },
-  genesis: {
-    '1': {
-      '1': [
-        'João 1:1',
-        'Salmos 33:6'
-      ]
-    }
-  }
-};
+
 
 /**
- * Retorna referências cruzadas para um versículo específico (mock).
+ * Busca referências cruzadas no banco de dados para um versículo específico.
  * @param livroSlug slug do livro (ex: 'joao')
  * @param capitulo número do capítulo como string (ex: '3')
  * @param versiculo número do versículo como string (ex: '16')
  * @returns array de referências ou null se não houver
  */
-export const getReferencias = (livroSlug: string, capitulo: string, versiculo: string): string[] | null => {
-  const refsLivro = referenciasMock[livroSlug];
-  if (!refsLivro) return null;
-  const refsCap = refsLivro[capitulo];
-  if (!refsCap) return null;
-  const refsVers = refsCap[versiculo];
-  if (!refsVers) return null;
-  return refsVers;
+export async function getReferencias(livroSlug: string, capitulo: string, versiculo: string): Promise<string[] | null> {
+  const referencias = await getReferenciaByVersiculo(livroSlug, Number(capitulo), Number(versiculo));
+  if (!referencias || referencias.length === 0) return null;
+  return referencias.map((r: { referencia: string }) => r.referencia);
 }

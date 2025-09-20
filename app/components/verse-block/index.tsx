@@ -23,7 +23,7 @@ export const VerseBlock: React.FC<VerseBlockProps> = ({ number, text, comment, r
     )}
     {reference && (
       <div className="crossref mt-1" aria-label="Referência cruzada">
-        {reference}
+        Ver {reference}
       </div>
     )}
   </div>

@@ -15,7 +15,7 @@ export default function BibliaDisplayPage({ params }: BibliaPageProps) {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
       <h1 className="text-2xl font-bold text-text mb-4">
-        {valid.slug.toUpperCase()} {capitulo}
+        {valid.nomeBonito.toUpperCase()} {capitulo}
       </h1>
       <div className="w-full max-w-xl bg-background rounded-xl p-4 shadow">
         {versiculos.map((v, i) => (

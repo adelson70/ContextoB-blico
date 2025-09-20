@@ -62,6 +62,7 @@ export const BibleSearchInput: React.FC<BibleSearchInputProps> = ({ onSearch }) 
             borderColor: "var(--secondary)",
             background: "var(--background)",
             color: "var(--text-color)",
+            textAlign: "center",
           }}
           placeholder="Ex: João 3"
           value={input}

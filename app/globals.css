@@ -1,32 +1,166 @@
 @import "tailwindcss";
 
+
+/* Paleta e variáveis globais para dark mode acadêmico */
 :root {
-  --background: #ffffff;
-  --text-color: #0f172a;
+  --background: #0F172A;
+  --text-color: #F1F5F9;
   --primary: #38BDF8;
-  --secondary: #E2E8F0;
   --highlight: #FACC15;
+  --neutral-light: #E2E8F0;
+  --font-sans: var(--font-geist-sans, 'Inter', 'Segoe UI', Arial, sans-serif);
+  --font-mono: var(--font-geist-mono, 'Fira Mono', 'Menlo', monospace);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
-    --background: #0F172A;
-    --text-color: #F1F5F9;
+    --background: #ffffff;
+    --text-color: #0f172a;
     --primary: #38BDF8;
-    --secondary: #E2E8F0;
     --highlight: #FACC15;
+    --neutral-light: #E2E8F0;
   }
 }
+
 body {
   background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-  text-align: center;
+  color: var(--text-color);
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin: 0;
+  min-height: 100vh;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background 0.2s, color 0.2s;
+}
+
+/* Hierarquia visual */
+h1, .h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 1.2rem;
+  letter-spacing: -0.01em;
+}
+h2, .h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 0.8rem;
+}
+h3, .h3 {
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+
+/* Texto corrido e notas */
+.text-base {
+  font-size: 1.05rem;
+  color: var(--text-color);
+}
+.note, .footnote {
+  font-size: 0.92rem;
+  color: var(--neutral-light);
+  font-style: italic;
+  margin-top: 0.5rem;
+}
+
+/* Links e botões */
+a {
+  color: var(--primary);
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+a:hover, a:focus {
+  color: var(--highlight);
+}
+
+button {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  border-radius: 1rem;
+  background: var(--primary);
+  color: var(--background);
+  padding: 0.75rem 1.5rem;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 4px 0 rgba(16,21,30,0.08);
+}
+button:hover:not(:disabled), button:focus-visible {
+  background: var(--highlight);
+  color: var(--background);
+  outline: 2px solid var(--primary);
+}
+button:active {
+  background: var(--primary);
+  color: var(--background);
+  box-shadow: 0 2px 8px 0 rgba(16,21,30,0.12);
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+input, textarea, select {
+  background: var(--background);
+  color: var(--text-color);
+  border: 1.5px solid var(--neutral-light);
+  border-radius: 1rem;
+  padding: 0.75rem 1.2rem;
+  font-size: 1rem;
+  font-family: var(--font-sans);
+  transition: border 0.2s, box-shadow 0.2s;
+}
+input:focus, textarea:focus, select:focus {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--primary);
+}
+input[aria-invalid="true"] {
+  border-color: #ef4444;
+}
+
+/* Responsividade básica */
+@media (max-width: 600px) {
+  h1, .h1 { font-size: 1.5rem; }
+  h2, .h2 { font-size: 1.15rem; }
+  .text-base { font-size: 0.98rem; }
+  body { font-size: 0.98rem; }
+}
+
+/* Bloco de versículo (VerseBlock) */
+.verse-block {
+  background: rgba(241,245,249,0.02);
+  border-left: 4px solid var(--highlight);
+  padding: 1rem 1.2rem 1rem 1.1rem;
+  margin-bottom: 0.7rem;
+  border-radius: 0.7rem;
+  box-shadow: 0 1px 4px 0 rgba(16,21,30,0.04);
+  color: var(--text-color);
+  position: relative;
+  transition: background 0.2s, border 0.2s;
+}
+.verse-block .verse-number {
+  color: var(--highlight);
+  font-weight: 700;
+  margin-right: 0.5em;
+  font-variant-numeric: tabular-nums;
+}
+.verse-block .highlight {
+  color: var(--highlight);
+  font-weight: 600;
+  background: none;
+}
+
+/* Notas de rodapé e referências */
+.footnote, .crossref {
+  color: var(--neutral-light);
+  font-size: 0.92rem;
+  font-style: italic;
+  margin-top: 0.3rem;
 }

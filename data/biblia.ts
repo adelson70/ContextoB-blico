@@ -1,3 +1,46 @@
+/**
+ * Retorna o slug e capítulo do capítulo anterior.
+ * Se for o primeiro capítulo do livro, retorna o último capítulo do livro anterior.
+ * Se já for o primeiro capítulo do Gênesis, retorna null.
+ */
+export function getPreviousChapter(slug: string, capitulo: number | string): { slug: string, capitulo: number } | null {
+  const idx = livros.findIndex(l => l.slug === slug);
+  if (idx === -1) return null;
+  const capNum = typeof capitulo === 'string' ? parseInt(capitulo, 10) : capitulo;
+  if (capNum > 1) {
+    return { slug, capitulo: capNum - 1 };
+  } else if (idx > 0) {
+    const prevLivro = livros[idx - 1];
+    return { slug: prevLivro.slug, capitulo: prevLivro.cap };
+  }
+  return null;
+}
+
+/**
+ * Retorna o slug e capítulo do próximo capítulo.
+ * Se for o último capítulo do livro, retorna o primeiro capítulo do próximo livro.
+ * Se já for o último capítulo do Apocalipse, retorna null.
+ */
+export function getNextChapter(slug: string, capitulo: number | string): { slug: string, capitulo: number } | null {
+  const idx = livros.findIndex(l => l.slug === slug);
+  if (idx === -1) return null;
+  const livro = livros[idx];
+  const capNum = typeof capitulo === 'string' ? parseInt(capitulo, 10) : capitulo;
+  if (capNum < livro.cap) {
+    return { slug, capitulo: capNum + 1 };
+  } else if (idx < livros.length - 1) {
+    const nextLivro = livros[idx + 1];
+    return { slug: nextLivro.slug, capitulo: 1 };
+  }
+  return null;
+}
+
+/**
+ * Retorna o path do menu principal (home)
+ */
+export function getMenuPath(): string {
+  return '/';
+}
 import { getComentarioByVersiculo } from '@/services/comentarioService';
 import { getReferenciaByVersiculo } from '@/services/referenciaService';
 
@@ -48,63 +91,63 @@ export const livros = [
     {slug: 'josue', name: 'Josué', cap: 24, abrev: 'js'},
     {slug: 'juizes', name: 'Juízes', cap: 21, abrev: 'jz'},
     {slug: 'rute', name: 'Rute', cap: 4, abrev: 'rt'},
-    {slug: '1-samuel', name: '1 Samuel', cap: 31, abrev: '1s'},
-    {slug: '2-samuel', name: '2 Samuel', cap: 24, abrev: '2s'},
-    {slug: '1-reis', name: '1 Reis', cap: 22, abrev: '1r'},
-    {slug: '2-reis', name: '2 Reis', cap: 25, abrev: '2r'},
-    {slug: '1-cronicas', name: '1 Crônicas', cap: 29, abrev: '1c'},
-    {slug: '2-cronicas', name: '2 Crônicas', cap: 36, abrev: '2c'},
-    {slug: 'esdras', name: 'Esdras', cap: 10, abrev: 'es'},
+    {slug: '1-samuel', name: '1 Samuel', cap: 31, abrev: '1sm'},
+    {slug: '2-samuel', name: '2 Samuel', cap: 24, abrev: '2sm'},
+    {slug: '1-reis', name: '1 Reis', cap: 22, abrev: '1rs'},
+    {slug: '2-reis', name: '2 Reis', cap: 25, abrev: '2rs'},
+    {slug: '1-cronicas', name: '1 Crônicas', cap: 29, abrev: '1cr'},
+    {slug: '2-cronicas', name: '2 Crônicas', cap: 36, abrev: '2cr'},
+    {slug: 'esdras', name: 'Esdras', cap: 10, abrev: 'ed'},
     {slug: 'neemias', name: 'Neemias', cap: 13, abrev: 'ne'},
-    {slug: 'ester', name: 'Ester', cap: 10, abrev: 'est'},
-    {slug: 'jo', name: 'Jó', cap: 42, abrev: 'jo'},
+    {slug: 'ester', name: 'Ester', cap: 10, abrev: 'et'},
+    {slug: 'jo', name: 'Jó', cap: 42, abrev: 'jó'},
     {slug: 'salmos', name: 'Salmos', cap: 150, abrev: 'sl'},
     {slug: 'proverbios', name: 'Provérbios', cap: 31, abrev: 'pv'},
     {slug: 'eclesiastes', name: 'Eclesiastes', cap: 12, abrev: 'ec'},
     {slug: 'cantares', name: 'Cânticos', cap: 8, abrev: 'ct'},
     {slug: 'isaias', name: 'Isaías', cap: 66, abrev: 'is'},
-    {slug: 'jeremias', name: 'Jeremias', cap: 52, abrev: 'je'},
-    {slug: 'lamentacoes', name: 'Lamentações', cap: 5, abrev: 'la'},
+    {slug: 'jeremias', name: 'Jeremias', cap: 52, abrev: 'jr'},
+    {slug: 'lamentacoes', name: 'Lamentações', cap: 5, abrev: 'lm'},
     {slug: 'ezequiel', name: 'Ezequiel', cap: 48, abrev: 'ez'},
-    {slug: 'daniel', name: 'Daniel', cap: 12, abrev: 'da'},
+    {slug: 'daniel', name: 'Daniel', cap: 12, abrev: 'dn'},
     {slug: 'oseias', name: 'Oseias', cap: 14, abrev: 'os'},
-    {slug: 'joel', name: 'Joel', cap: 3, abrev: 'jo'},
+    {slug: 'joel', name: 'Joel', cap: 3, abrev: 'jl'},
     {slug: 'amos', name: 'Amós', cap: 9, abrev: 'am'},
     {slug: 'obadias', name: 'Obadias', cap: 1, abrev: 'ob'},
-    {slug: 'jonas', name: 'Jonas', cap: 4, abrev: 'jo'},
-    {slug: 'miqueias', name: 'Miquéias', cap: 7, abrev: 'mi'},
+    {slug: 'jonas', name: 'Jonas', cap: 4, abrev: 'jn'},
+    {slug: 'miqueias', name: 'Miquéias', cap: 7, abrev: 'mq'},
     {slug: 'naum', name: 'Naum', cap: 3, abrev: 'na'},
-    {slug: 'habacuque', name: 'Habacuque', cap: 3, abrev: 'ha'},
-    {slug: 'sofonias', name: 'Sofonias', cap: 3, abrev: 'so'},
+    {slug: 'habacuque', name: 'Habacuque', cap: 3, abrev: 'hc'},
+    {slug: 'sofonias', name: 'Sofonias', cap: 3, abrev: 'sf'},
     {slug: 'ageu', name: 'Ageu', cap: 2, abrev: 'ag'},
-    {slug: 'zacarias', name: 'Zacarias', cap: 14, abrev: 'za'},
-    {slug: 'malaquias', name: 'Malaquias', cap: 4, abrev: 'ma'},
+    {slug: 'zacarias', name: 'Zacarias', cap: 14, abrev: 'zc'},
+    {slug: 'malaquias', name: 'Malaquias', cap: 4, abrev: 'ml'},
     {slug: 'mateus', name: 'Mateus', cap: 28, abrev: 'mt'},
-    {slug: 'marcos', name: 'Marcos', cap: 16, abrev: 'mr'},
-    {slug: 'lucas', name: 'Lucas', cap: 24, abrev: 'lu'},
+    {slug: 'marcos', name: 'Marcos', cap: 16, abrev: 'mc'},
+    {slug: 'lucas', name: 'Lucas', cap: 24, abrev: 'lc'},
     {slug: 'joao', name: 'João', cap: 21, abrev: 'jo'},
-    {slug: 'atos', name: 'Atos', cap: 28, abrev: 'at'},
-    {slug: 'romanos', name: 'Romanos', cap: 16, abrev: 'ro'},
-    {slug: '1-corintios', name: '1 Coríntios', cap: 16, abrev: '1c'},
-    {slug: '2-corintios', name: '2 Coríntios', cap: 13, abrev: '2c'},
-    {slug: 'galatas', name: 'Gálatas', cap: 6, abrev: 'ga'},
+    {slug: 'atos', name: 'Atos', cap: 28, abrev: 'atos'},
+    {slug: 'romanos', name: 'Romanos', cap: 16, abrev: 'rm'},
+    {slug: '1-corintios', name: '1 Coríntios', cap: 16, abrev: '1co'},
+    {slug: '2-corintios', name: '2 Coríntios', cap: 13, abrev: '2co'},
+    {slug: 'galatas', name: 'Gálatas', cap: 6, abrev: 'gl'},
     {slug: 'efesios', name: 'Efésios', cap: 6, abrev: 'ef'},
-    {slug: 'filipenses', name: 'Filipenses', cap: 4, abrev: 'fi'},
-    {slug: 'colossenses', name: 'Colossenses', cap: 4, abrev: 'co'},
-    {slug: '1-tessalonicenses', name: '1 Tessalonicenses', cap: 5, abrev: '1t'},
-    {slug: '2-tessalonicenses', name: '2 Tessalonicenses', cap: 3, abrev: '2t'},
-    {slug: '1-timoteo', name: '1 Timóteo', cap: 6, abrev: '1t'},
-    {slug: '2-timoteo', name: '2 Timóteo', cap: 4, abrev: '2t'},
-    {slug: 'tito', name: 'Tito', cap: 3, abrev: 'ti'},
-    {slug: 'filemom', name: 'Filemom', cap: 1, abrev: 'fi'},
-    {slug: 'hebreus', name: 'Hebreus', cap: 13, abrev: 'he'},
-    {slug: 'tiago', name: 'Tiago', cap: 5, abrev: 'ti'},
-    {slug: '1-pedro', name: '1 Pedro', cap: 5, abrev: '1p'},
-    {slug: '2-pedro', name: '2 Pedro', cap: 3, abrev: '2p'},
-    {slug: '1-joao', name: '1 João', cap: 5, abrev: '1j'},
-    {slug: '2-joao', name: '2 João', cap: 1, abrev: '2j'},
-    {slug: '3-joao', name: '3 João', cap: 1, abrev: '3j'},
-    {slug: 'judas', name: 'Judas', cap: 1, abrev: 'ju'},
+    {slug: 'filipenses', name: 'Filipenses', cap: 4, abrev: 'fp'},
+    {slug: 'colossenses', name: 'Colossenses', cap: 4, abrev: 'cl'},
+    {slug: '1-tessalonicenses', name: '1 Tessalonicenses', cap: 5, abrev: '1ts'},
+    {slug: '2-tessalonicenses', name: '2 Tessalonicenses', cap: 3, abrev: '2ts'},
+    {slug: '1-timoteo', name: '1 Timóteo', cap: 6, abrev: '1tm'},
+    {slug: '2-timoteo', name: '2 Timóteo', cap: 4, abrev: '2tm'},
+    {slug: 'tito', name: 'Tito', cap: 3, abrev: 'tt'},
+    {slug: 'filemom', name: 'Filemom', cap: 1, abrev: 'fm'},
+    {slug: 'hebreus', name: 'Hebreus', cap: 13, abrev: 'hb'},
+    {slug: 'tiago', name: 'Tiago', cap: 5, abrev: 'tg'},
+    {slug: '1-pedro', name: '1 Pedro', cap: 5, abrev: '1pe'},
+    {slug: '2-pedro', name: '2 Pedro', cap: 3, abrev: '2pe'},
+    {slug: '1-joao', name: '1 João', cap: 5, abrev: '1jo'},
+    {slug: '2-joao', name: '2 João', cap: 1, abrev: '2jo'},
+    {slug: '3-joao', name: '3 João', cap: 1, abrev: '3jo'},
+    {slug: 'judas', name: 'Judas', cap: 1, abrev: 'jd'},
     {slug: 'apocalipse', name: 'Apocalipse', cap: 22, abrev: 'ap'},
 ]
 

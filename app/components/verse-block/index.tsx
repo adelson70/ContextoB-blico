@@ -50,7 +50,7 @@ export const VerseBlock: React.FC<VerseBlockProps> = ({ number, text, comment, r
         <span className="verse-number select-none">{number}</span>
         <span className="text-base leading-relaxed ml-6">{text}</span>
         {reference && (
-          <div className="crossref mt-4 text-xs text-accent-700" aria-label="Referência cruzada">
+          <div className="crossref mt-2 text-xs text-accent-700" aria-label="Referência cruzada">
             Ver {reference}
           </div>
         )}

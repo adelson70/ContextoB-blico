@@ -162,5 +162,5 @@ input[aria-invalid="true"] {
   color: var(--neutral-light);
   font-size: 0.92rem;
   font-style: italic;
-  margin-top: 0.3rem;
+  margin-top: 1.5rem;
 }

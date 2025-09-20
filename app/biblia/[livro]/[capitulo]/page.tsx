@@ -42,6 +42,8 @@ export default async function BibliaDisplayPage({ params }: BibliaPageProps) {
             text={v}
             comment={comentarios[i] || undefined}
             reference={referencias[i] ? referencias[i]?.join('; ') : undefined}
+            book={valid.nomeBonito || valid.slug}
+            chapter={capitulo}
           />
         ))}
       </div>

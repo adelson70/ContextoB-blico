@@ -7,6 +7,8 @@ interface VerseBlockProps {
   text: string;
   comment?: string;
   reference?: string;
+  book: string;
+  chapter: string | number;
 }
 
 /**
@@ -14,7 +16,8 @@ interface VerseBlockProps {
  * - Usa alto contraste, espaçamento e hierarquia visual.
  * - Comentário e referência são opcionais e aparecem de forma sutil.
  */
-export const VerseBlock: React.FC<VerseBlockProps & { book?: string; chapter?: string }> = ({ number, text, comment, reference, book, chapter }) => {
+// ...existing code...
+export const VerseBlock: React.FC<VerseBlockProps> = ({ number, text, comment, reference, book, chapter }) => {
   const [showModal, setShowModal] = useState(false);
   const hasComment = !!comment;
   return (
@@ -62,8 +65,8 @@ export const VerseBlock: React.FC<VerseBlockProps & { book?: string; chapter?: s
             >
               &times;
             </button>
-            <h2 className="text-xl font-bold mb-4 text-center">
-              {(book && chapter) ? `${book} ${chapter}:${number}` : `Versículo ${number}`}
+                  <h2 className="text-xl font-bold mb-4 text-center">
+                    {`${book} ${chapter}:${number}`}
             </h2>
             <div className="text-base text-text max-h-[50vh] overflow-y-auto whitespace-pre-line">
               {comment}

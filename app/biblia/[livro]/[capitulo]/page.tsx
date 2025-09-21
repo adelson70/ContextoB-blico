@@ -1,5 +1,5 @@
 import { getVersiculos, validateBookAndChapter, getReferencias, getComentario, getPreviousChapter, getNextChapter, getMenuPath } from '@/data/biblia';
-import { ArrowLeft, ArrowRight, Menu as MenuIcon } from 'lucide-react';
+import { ArrowLeft, ArrowRight, HomeIcon } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { VerseBlock } from '@components/verse-block/index';
 
@@ -49,8 +49,8 @@ export default async function BibliaDisplayPage({ params }: BibliaPageProps) {
           className="group flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white font-semibold shadow transition hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
           aria-label="Voltar para o menu principal"
         >
-          <MenuIcon className="w-5 h-5" aria-hidden="true" />
-          <span className="hidden sm:inline">Menu</span>
+          <HomeIcon className="w-5 h-5" aria-hidden="true" />
+          <span className="hidden sm:inline">Inicio</span>
         </a>
         <a
           href={next ? `/biblia/${next.slug}/${next.capitulo}` : menuPath}

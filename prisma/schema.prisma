@@ -21,7 +21,7 @@ model Comentario {
   versiculo  Int
   texto      String
   createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  updatedAt  DateTime @default(now())
 
   @@index([livroSlug, capitulo, versiculo])
 
@@ -35,9 +35,22 @@ model Referencia {
   versiculo  Int
   referencia String   // Ex: 'Romanos 5:8'
   createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  updatedAt  DateTime @default(now())
 
   @@index([livroSlug, capitulo, versiculo])
 
   @@map("referencias")
+}
+
+model Usuario {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  nome      String?
+  senha     String
+  createdAt  DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@index([email])
+
+  @@map("usuarios")
 }

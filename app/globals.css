@@ -143,13 +143,23 @@ input[aria-invalid="true"] {
   box-shadow: 0 1px 4px 0 rgba(16,21,30,0.04);
   color: var(--text-color);
   position: relative;
-  transition: background 0.2s, border 0.2s;
+  transition: background 0.22s cubic-bezier(.4,0,.2,1), border 0.22s cubic-bezier(.4,0,.2,1), box-shadow 0.22s cubic-bezier(.4,0,.2,1);
+}
+.verse-block:hover {
+  background: rgba(241,245,249,0.10);
+  box-shadow: 0 4px 24px 0 rgba(56,189,248,0.10), 0 1.5px 8px 0 rgba(16,21,30,0.10);
+  border-left: 4px solid var(--primary);
+  outline: none;
 }
 .verse-block .verse-number {
   color: var(--highlight);
   font-weight: 700;
   margin-right: 0.5em;
   font-variant-numeric: tabular-nums;
+  transition: color 0.22s cubic-bezier(.4,0,.2,1);
+}
+.verse-block:hover .verse-number {
+  color: var(--primary);
 }
 .verse-block .highlight {
   color: var(--highlight);

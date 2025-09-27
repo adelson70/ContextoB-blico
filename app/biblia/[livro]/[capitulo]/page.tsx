@@ -1,3 +1,5 @@
+import { pesquisaBiblica } from '@/services/pesquisaBiblica';
+import { headers } from 'next/headers';
 import { getVersiculos, validateBookAndChapter, getReferencias, getComentario, getPreviousChapter, getNextChapter, getMenuPath } from '@/data/biblia';
 import { ArrowLeft, ArrowRight, HomeIcon } from 'lucide-react';
 import { notFound } from 'next/navigation';
@@ -11,6 +13,11 @@ interface BibliaPageProps {
 
 export default async function BibliaDisplayPage({ params }: BibliaPageProps) {
   const { livro, capitulo } = await params;
+
+  const ip = (await headers()).get('x-client-ip') || 'anonimo'
+
+  pesquisaBiblica(livro, capitulo, ip)
+
   const valid = validateBookAndChapter(livro, capitulo);
   if (!valid) return notFound();
   const versiculos = getVersiculos(valid.slug, capitulo);

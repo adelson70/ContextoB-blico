@@ -15,30 +15,28 @@ datasource db {
 }
 
 model Comentario {
-  id         Int      @id @default(autoincrement())
-  livroSlug  String   // Ex: 'joao'
-  capitulo   Int
-  versiculo  Int
-  texto      String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  livroSlug String // Ex: 'joao'
+  capitulo  Int
+  versiculo Int
+  texto     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 
   @@index([livroSlug, capitulo, versiculo])
-
   @@map("comentarios")
 }
 
 model Referencia {
   id         Int      @id @default(autoincrement())
-  livroSlug  String   // Ex: 'joao'
+  livroSlug  String // Ex: 'joao'
   capitulo   Int
   versiculo  Int
-  referencia String   // Ex: 'Romanos 5:8'
+  referencia String // Ex: 'Romanos 5:8'
   createdAt  DateTime @default(now())
   updatedAt  DateTime @default(now())
 
   @@index([livroSlug, capitulo, versiculo])
-
   @@map("referencias")
 }
 
@@ -47,10 +45,20 @@ model Usuario {
   email     String   @unique
   nome      String?
   senha     String
-  createdAt  DateTime @default(now())
+  createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
   @@index([email])
-
   @@map("usuarios")
+}
+
+model Pesquisa {
+  id             Int      @id @default(autoincrement())
+  nome_livro     String
+  capitulo_livro String
+  ip             String
+  createdAt      DateTime @default(now())
+
+  @@index([nome_livro])
+  @@map("pesquisas")
 }

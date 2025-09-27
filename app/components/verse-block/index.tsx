@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from "react";
+import { Modal } from "../Modal";
 
 interface VerseBlockProps {
   number: number;
@@ -56,23 +57,9 @@ export const VerseBlock: React.FC<VerseBlockProps> = ({ number, text, comment, r
         )}
       </div>
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/40" role="dialog" aria-modal="true">
-          <div className="bg-background rounded-xl shadow-2xl max-w-lg w-[90vw] p-6 relative animate-fade-in" style={{backgroundColor: 'var(--color-background, #181825)', opacity: 1}}>
-            <button
-              className="absolute top-3 right-3 text-2xl text-accent-700 hover:text-accent-900 focus:outline-none"
-              aria-label="Fechar comentários"
-              onClick={() => setShowModal(false)}
-            >
-              &times;
-            </button>
-                  <h2 className="text-xl font-bold mb-4 text-center">
-                    {`${book} ${chapter}:${number}`}
-            </h2>
-            <div className="text-base text-text max-h-[50vh] overflow-y-auto whitespace-pre-line">
-              {comment}
-            </div>
-          </div>
-        </div>
+          <Modal isOpen={showModal} onClose={() => setShowModal(false)} title={`${book} ${chapter}:${number}`}>
+            {comment}
+          </Modal>
       )}
     </>
   );

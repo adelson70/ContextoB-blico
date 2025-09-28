@@ -38,22 +38,19 @@ export default function NavBar() {
                 justify="center"
             >
                 <NavbarItem>
-                    <Link color="foreground" href="/comentario">
+                    <Link color="foreground" href="#">
                         Comentário
                     </Link>
                 </NavbarItem>
                 <NavbarItem>
-                    <Link href="/referencia" color="foreground">
+                    <Link href="#" color="foreground">
                         Referência Bíblica
                     </Link>
                 </NavbarItem>
-            </NavbarContent>
 
-            {/* Bloco da Direita: Ações */}
-            <NavbarContent justify="end">
                 <NavbarItem className="hidden sm:flex">
                     <Link href="#" onClick={handleLogout}>
-                        Logout
+                        Sair
                     </Link>
                 </NavbarItem>
             </NavbarContent>

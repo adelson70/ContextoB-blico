@@ -4,6 +4,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import Select from "react-select";
 import { livros, getVersiculos } from "@/src/data/biblia";
 import { X, Trash2 } from "lucide-react";
+import { toast } from "react-toastify";
 
 // Função para converter slug do livro em nome bonito
 const getLivroNome = (livroSlug: string) => {
@@ -151,12 +152,12 @@ export default function ReferenciaModal({ isOpen, onClose, onSuccess }: Referenc
     try {
       const versiculoTexto = versiculoSelecionado.label.split('. ')[1] || versiculoSelecionado.label;
       
-      await createReferencia({
-        livroSlug: livroSelecionado.value,
-        capitulo: parseInt(capituloSelecionado.value),
-        versiculo: parseInt(versiculoSelecionado.value),
-        referencia: versiculoTexto
-      });
+      // await createReferencia({
+      //   livroSlug: livroSelecionado.value,
+      //   capitulo: parseInt(capituloSelecionado.value),
+      //   versiculo: parseInt(versiculoSelecionado.value),
+      //   referencia: versiculoTexto
+      // });
 
       // Recarregar a lista de referências
       const response = await fetch(`/api/referencias?livroSlug=${livroSelecionado.value}&capitulo=${capituloSelecionado.value}&versiculo=${versiculoSelecionado.value}`);
@@ -178,13 +179,13 @@ export default function ReferenciaModal({ isOpen, onClose, onSuccess }: Referenc
 
   const prepararAdicaoReferencia = () => {
     if (!livroSelecionado || !capituloSelecionado || !versiculoSelecionado) {
-      alert("Por favor, selecione livro, capítulo e versículo base");
+      toast.error("Por favor, selecione livro, capítulo e versículo base");
       return;
     }
 
     const versiculos = getVersiculos(livroSelecionado.value, capituloSelecionado.value);
     if (!versiculos) {
-      alert("Versículo não encontrado");
+      toast.error("Versículo não encontrado");
       return;
     }
 
@@ -201,13 +202,13 @@ export default function ReferenciaModal({ isOpen, onClose, onSuccess }: Referenc
 
   const prepararReferenciaParaAdicionar = () => {
     if (!livroReferencia || !capituloReferencia || !versiculoReferencia) {
-      alert("Por favor, selecione livro, capítulo e versículo da referência");
+      toast.error("Por favor, selecione livro, capítulo e versículo da referência");
       return;
     }
 
     const versiculos = getVersiculos(livroReferencia.value, capituloReferencia.value);
     if (!versiculos) {
-      alert("Versículo não encontrado");
+      toast.error("Versículo não encontrado");
       return;
     }
 
@@ -223,7 +224,7 @@ export default function ReferenciaModal({ isOpen, onClose, onSuccess }: Referenc
 
   const adicionarReferenciaPreparada = async () => {
     if (!versiculoBase || !referenciaParaAdicionar) {
-      alert("Por favor, selecione a referência bíblica");
+      toast.error("Por favor, selecione a referência bíblica");
       return;
     }
 
@@ -259,9 +260,11 @@ export default function ReferenciaModal({ isOpen, onClose, onSuccess }: Referenc
       setCapituloReferencia(null);
       setVersiculoReferencia(null);
       setMostrarAdicao(false);
+      
+      toast.success("Referência adicionada com sucesso!");
     } catch (error) {
       console.error("Erro ao adicionar referência:", error);
-      alert("Erro ao adicionar referência");
+      toast.error("Erro ao adicionar referência");
     } finally {
       setLoading(false);
     }
@@ -287,13 +290,13 @@ export default function ReferenciaModal({ isOpen, onClose, onSuccess }: Referenc
             setReferencias(refs);
           }
         }
-        alert("Referência deletada com sucesso!");
+        toast.success("Referência deletada com sucesso!");
       } else {
-        alert("Erro ao deletar referência");
+        toast.error("Erro ao deletar referência");
       }
     } catch (error) {
       console.error("Erro ao deletar referência:", error);
-      alert("Erro ao deletar referência");
+      toast.error("Erro ao deletar referência");
     }
   };
 
@@ -313,7 +316,7 @@ export default function ReferenciaModal({ isOpen, onClose, onSuccess }: Referenc
 
   const confirmarDelecaoEmMassa = async () => {
     if (referenciasSelecionadas.length === 0) {
-      alert("Selecione pelo menos uma referência para deletar");
+      toast.error("Selecione pelo menos uma referência para deletar");
       return;
     }
 
@@ -335,13 +338,13 @@ export default function ReferenciaModal({ isOpen, onClose, onSuccess }: Referenc
         }
       }
 
-      alert(`${referenciasSelecionadas.length} referência(s) deletada(s) com sucesso!`);
+      toast.success(`${referenciasSelecionadas.length} referência(s) deletada(s) com sucesso!`);
       setModoDelecao(false);
       setReferenciasSelecionadas([]);
       setMostrarConfirmacao(false);
     } catch (error) {
       console.error("Erro ao deletar referências:", error);
-      alert("Erro ao deletar referências");
+      toast.error("Erro ao deletar referências");
     } finally {
       setLoading(false);
     }
@@ -680,7 +683,7 @@ export default function ReferenciaModal({ isOpen, onClose, onSuccess }: Referenc
                   </div>
                 ) : referencias.length === 0 ? (
                   <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                    Nenhuma referência neste capítulo
+                    Nenhuma referência encontrada
                   </div>
                 ) : (
                   <>

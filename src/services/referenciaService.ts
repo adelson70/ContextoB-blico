@@ -7,7 +7,7 @@ export async function getReferenciaByVersiculo(livroSlug: string, capitulo: numb
       livroSlug, 
       capitulo, 
       versiculo,
-      isDeleted: false 
+      isDeleted: false
     },
     orderBy: { id: 'asc' },
   });
@@ -17,7 +17,8 @@ export async function getReferenciaByVersiculo(livroSlug: string, capitulo: numb
 export async function getReferenciasByCapitulo(livroSlug: string, capitulo: number, versiculo?: number) {
   const whereClause: any = { 
     livroSlug, 
-    capitulo
+    capitulo,
+    isDeleted: false
   };
 
   if (versiculo !== undefined) {
@@ -47,9 +48,10 @@ export async function createReferencia(data: {
   });
 }
 
-// Delete de uma referência
+// Soft delete de uma referência
 export async function deleteReferencia(id: number) {
-  return prisma.referencia.delete({
-    where: { id }
+  return prisma.referencia.update({
+    where: { id },
+    data: { isDeleted: true }
   });
 }

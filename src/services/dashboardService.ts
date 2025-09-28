@@ -1,4 +1,5 @@
 import { prisma } from '@/src/lib/prisma';
+import { livros } from '@/src/data/biblia';
 
 export interface KpiData {
   leiturasHoje: number;
@@ -28,6 +29,16 @@ export interface HorariosPicoData {
 }
 
 export interface CrescimentoData {
+  labels: string[];
+  data: number[];
+}
+
+export interface TopVersiculosComentariosData {
+  labels: string[];
+  data: number[];
+}
+
+export interface TopVersiculosReferenciasData {
   labels: string[];
   data: number[];
 }
@@ -379,5 +390,72 @@ export class DashboardService {
     const mes = (data.getMonth() + 1).toString().padStart(2, '0');
     const ano = data.getFullYear().toString().slice(-2);
     return `${mes}/${ano}`;
+  }
+
+  /**
+   * Busca os versículos com mais comentários
+   */
+  static async getTopVersiculosComentariosData(): Promise<TopVersiculosComentariosData> {
+    const comentarios = await prisma.comentario.groupBy({
+      by: ['livroSlug', 'capitulo', 'versiculo'],
+      _count: {
+        id: true
+      },
+      orderBy: {
+        _count: {
+          id: 'desc'
+        }
+      },
+      take: 10
+    });
+
+    // Criar mapa de livros para buscar nomes
+    const livroMap = new Map(livros.map(l => [l.slug, l.name]));
+
+    const labels: string[] = [];
+    const data: number[] = [];
+
+    comentarios.forEach(comentario => {
+      const nomeLivro = livroMap.get(comentario.livroSlug) || comentario.livroSlug;
+      labels.push(`${nomeLivro} ${comentario.capitulo}:${comentario.versiculo}`);
+      data.push(comentario._count.id);
+    });
+
+    return { labels, data };
+  }
+
+  /**
+   * Busca os versículos com mais referências bíblicas
+   */
+  static async getTopVersiculosReferenciasData(): Promise<TopVersiculosReferenciasData> {
+    const referencias = await prisma.referencia.groupBy({
+      by: ['livroSlug', 'capitulo', 'versiculo'],
+      where: {
+        isDeleted: false
+      },
+      _count: {
+        id: true
+      },
+      orderBy: {
+        _count: {
+          id: 'desc'
+        }
+      },
+      take: 10
+    });
+
+    // Criar mapa de livros para buscar nomes
+    const livroMap = new Map(livros.map(l => [l.slug, l.name]));
+
+    const labels: string[] = [];
+    const data: number[] = [];
+
+    referencias.forEach(referencia => {
+      const nomeLivro = livroMap.get(referencia.livroSlug) || referencia.livroSlug;
+      labels.push(`${nomeLivro} ${referencia.capitulo}:${referencia.versiculo}`);
+      data.push(referencia._count.id);
+    });
+
+    return { labels, data };
   }
 }

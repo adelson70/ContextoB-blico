@@ -20,16 +20,16 @@ ChartJS.register(
   Legend
 );
 
-interface TopBooksData {
+interface TopVersiculosComentariosData {
   labels: string[];
   data: number[];
 }
 
-interface TopBooksChartProps {
-  data: TopBooksData;
+interface TopVersiculosComentariosChartProps {
+  data: TopVersiculosComentariosData;
 }
 
-export default function TopBooksChart({ data }: TopBooksChartProps) {
+export default function TopVersiculosComentariosChart({ data }: TopVersiculosComentariosChartProps) {
   const colors = [
     'rgba(99, 102, 241, 0.8)',   // Indigo
     'rgba(139, 92, 246, 0.8)',   // Purple
@@ -60,7 +60,7 @@ export default function TopBooksChart({ data }: TopBooksChartProps) {
     labels: data.labels,
     datasets: [
       {
-        label: 'Total de Leituras',
+        label: 'Total de Comentários',
         data: data.data,
         backgroundColor: colors,
         borderColor: borderColors,
@@ -86,16 +86,16 @@ export default function TopBooksChart({ data }: TopBooksChartProps) {
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         titleColor: '#fff',
         bodyColor: '#fff',
-        borderColor: 'rgba(99, 102, 241, 0.5)',
+        borderColor: 'rgba(34, 197, 94, 0.5)',
         borderWidth: 1,
         cornerRadius: 8,
         displayColors: false,
         callbacks: {
           title: function(context: any) {
-            return `Livro: ${context[0].label}`;
+            return `Versículo: ${context[0].label}`;
           },
           label: function(context: any) {
-            return `Total de leituras: ${context.parsed.x.toLocaleString('pt-BR')}`;
+            return `Total de comentários: ${context.parsed.x.toLocaleString('pt-BR')}`;
           }
         }
       }
@@ -142,10 +142,10 @@ export default function TopBooksChart({ data }: TopBooksChartProps) {
     <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
       <div className="mb-6">
         <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">
-          Livros Mais Populares
+          Versículos com Mais Comentários
         </h3>
         <p className="text-sm text-slate-600 dark:text-slate-400">
-          Ranking dos 10 livros mais lidos no total
+          Ranking dos 10 versículos com mais comentários
         </p>
       </div>
       <div className="h-80">

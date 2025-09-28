@@ -35,9 +35,11 @@ export default function CapitulosPopularesChart({ data }: CapitulosPopularesChar
       {
         label: "Acessos",
         data: data.data,
-        backgroundColor: "rgba(59, 130, 246, 0.8)",
-        borderColor: "rgba(59, 130, 246, 1)",
-        borderWidth: 1,
+        backgroundColor: "rgba(99, 102, 241, 0.8)",
+        borderColor: "rgba(99, 102, 241, 1)",
+        borderWidth: 2,
+        borderRadius: 6,
+        borderSkipped: false
       },
     ],
   };
@@ -48,21 +50,50 @@ export default function CapitulosPopularesChart({ data }: CapitulosPopularesChar
     plugins: {
       legend: {
         position: "top" as const,
+        labels: {
+          color: '#FFFFFF',
+          font: {
+            size: 14,
+            weight: '600' as const
+          }
+        }
       },
       title: {
         display: true,
         text: "Capítulos Mais Populares",
+        color: '#FFFFFF',
+        font: {
+          size: 16,
+          weight: '700' as const
+        }
       },
     },
     scales: {
       y: {
         beginAtZero: true,
+        grid: {
+          color: 'rgba(107, 114, 128, 0.1)',
+          drawBorder: false
+        },
         ticks: {
+          color: '#FFFFFF',
+          font: {
+            size: 12,
+            weight: '500' as const
+          },
           stepSize: 1,
         },
       },
       x: {
+        grid: {
+          display: false
+        },
         ticks: {
+          color: '#FFFFFF',
+          font: {
+            size: 12,
+            weight: '600' as const
+          },
           maxRotation: 45,
           minRotation: 45,
         },

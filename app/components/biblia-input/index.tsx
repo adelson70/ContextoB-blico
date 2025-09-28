@@ -42,13 +42,7 @@ export const BibleSearchInput: React.FC<BibleSearchInputProps> = ({ onSearch }) 
 
   return (
     <div className="flex flex-col items-center justify-center w-full py-8">
-      <label
-        htmlFor="bible-search"
-        className="mb-2 text-base font-medium text-text"
-      >
-        Pesquisar livro e capítulo
-      </label>
-      <div className="flex w-full max-w-md">
+      <div className="flex w-full max-w-[80vh]">
         <input
           id="bible-search"
           type="text"
@@ -64,7 +58,7 @@ export const BibleSearchInput: React.FC<BibleSearchInputProps> = ({ onSearch }) 
             color: "var(--text-color)",
             textAlign: "center",
           }}
-          placeholder="Ex: João 3"
+          placeholder="Pesquisa livro e capítulo, exemplo: João 3"
           value={input}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}

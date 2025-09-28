@@ -174,3 +174,60 @@ input[aria-invalid="true"] {
   font-style: italic;
   margin-top: 1.5rem;
 }
+
+/* Z-index hierarchy para navbar e scrollbar */
+html {
+  scrollbar-gutter: stable;
+  overflow-x: hidden;
+}
+
+/* Garantir que a barra de rolagem apareça entre body e navbar */
+body {
+  position: relative;
+  z-index: 1;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+/* Navbar com z-index alto para ficar acima da scrollbar */
+nav.sticky {
+  z-index: 20;
+  position: sticky;
+  top: 0;
+}
+
+/* Conteúdo principal com margem para não ficar atrás da navbar */
+main {
+  position: relative;
+  z-index: 1;
+}
+
+/* Modais e overlays com z-index alto */
+.modal, .overlay {
+  z-index: 50;
+}
+
+/* Garantir que a scrollbar não sobreponha a navbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  margin-top: 64px; /* Altura da navbar */
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.8);
+}
+
+/* Para Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+}

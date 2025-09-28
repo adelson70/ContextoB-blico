@@ -17,6 +17,21 @@ export interface TopBooksData {
   data: number[];
 }
 
+export interface CapitulosPopularesData {
+  labels: string[];
+  data: number[];
+}
+
+export interface HorariosPicoData {
+  labels: string[];
+  data: number[];
+}
+
+export interface CrescimentoData {
+  labels: string[];
+  data: number[];
+}
+
 export class DashboardService {
   /**
    * Busca os dados dos KPIs para hoje
@@ -250,11 +265,119 @@ export class DashboardService {
   }
 
   /**
+   * Busca os capítulos mais populares
+   */
+  static async getCapitulosPopularesData(): Promise<CapitulosPopularesData> {
+    const topCapitulos = await prisma.pesquisa.groupBy({
+      by: ['nome_livro', 'capitulo_livro'],
+      _count: {
+        nome_livro: true
+      },
+      orderBy: {
+        _count: {
+          nome_livro: 'desc'
+        }
+      },
+      take: 10
+    });
+
+    const labels = topCapitulos.map(item => 
+      `${this.formatarNomeLivro(item.nome_livro)} ${item.capitulo_livro}`
+    );
+    const data = topCapitulos.map(item => Number(item._count.nome_livro));
+
+    return { labels, data };
+  }
+
+  /**
+   * Busca os horários de pico de acesso
+   */
+  static async getHorariosPicoData(): Promise<HorariosPicoData> {
+    const registros = await prisma.pesquisa.findMany({
+      select: {
+        createdAt: true
+      }
+    });
+
+    // Agrupar por hora do dia
+    const dadosMap = new Map<number, number>();
+    
+    registros.forEach(registro => {
+      const hora = registro.createdAt.getHours();
+      dadosMap.set(hora, (dadosMap.get(hora) || 0) + 1);
+    });
+
+    // Criar array com todas as horas do dia
+    const labels: string[] = [];
+    const data: number[] = [];
+
+    for (let i = 0; i < 24; i++) {
+      labels.push(`${i.toString().padStart(2, '0')}:00`);
+      data.push(dadosMap.get(i) || 0);
+    }
+
+    return { labels, data };
+  }
+
+  /**
+   * Busca dados de crescimento mensal
+   */
+  static async getCrescimentoData(): Promise<CrescimentoData> {
+    const seisMesesAtras = new Date();
+    seisMesesAtras.setMonth(seisMesesAtras.getMonth() - 6);
+    seisMesesAtras.setDate(1);
+    seisMesesAtras.setHours(0, 0, 0, 0);
+
+    const registros = await prisma.pesquisa.findMany({
+      where: {
+        createdAt: {
+          gte: seisMesesAtras
+        }
+      },
+      select: {
+        createdAt: true
+      }
+    });
+
+    // Agrupar por mês
+    const dadosMap = new Map<string, number>();
+    
+    registros.forEach(registro => {
+      const mesAno = `${registro.createdAt.getFullYear()}-${(registro.createdAt.getMonth() + 1).toString().padStart(2, '0')}`;
+      dadosMap.set(mesAno, (dadosMap.get(mesAno) || 0) + 1);
+    });
+
+    // Criar array com os últimos 6 meses
+    const labels: string[] = [];
+    const data: number[] = [];
+
+    for (let i = 5; i >= 0; i--) {
+      const dataAtual = new Date();
+      dataAtual.setMonth(dataAtual.getMonth() - i);
+      const mesAno = `${dataAtual.getFullYear()}-${(dataAtual.getMonth() + 1).toString().padStart(2, '0')}`;
+      
+      labels.push(this.formatarMesAno(dataAtual));
+      data.push(dadosMap.get(mesAno) || 0);
+    }
+
+    return { labels, data };
+  }
+
+  /**
    * Formata a data para exibição
    */
   private static formatarData(data: Date): string {
     const dia = data.getDate().toString().padStart(2, '0');
     const mes = (data.getMonth() + 1).toString().padStart(2, '0');
     return `${dia}/${mes}`;
+  }
+
+  /**
+   * Formata mês/ano para exibição
+   */
+  private static formatarMesAno(data: Date): string {
+    const mes = (data.getMonth() + 1).toString().padStart(2, '0');
+    const ano = data.getFullYear().toString().slice(-2);
+    return `${mes}/${ano}`;
   }
 }

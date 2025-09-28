@@ -20,10 +20,12 @@ model Comentario {
   capitulo  Int
   versiculo Int
   texto     String
+  isDeleted Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
   @@index([livroSlug, capitulo, versiculo])
+  @@index([isDeleted])
   @@map("comentarios")
 }
 
@@ -33,10 +35,12 @@ model Referencia {
   capitulo   Int
   versiculo  Int
   referencia String // Ex: 'Romanos 5:8'
+  isDeleted  Boolean  @default(false)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @default(now())
 
   @@index([livroSlug, capitulo, versiculo])
+  @@index([isDeleted])
   @@map("referencias")
 }
 

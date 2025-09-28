@@ -74,7 +74,7 @@ export function validateBookAndChapter(livroNome: string, capitulo: string | num
   return { slug: livro.slug, abrev: livro.abrev, capitulo: capNum, nomeBonito: livro.name };
 }
 
-import bibliaNVI from '@/data/biblia-nvi.json'
+import bibliaNVI from './biblia-nvi.json'
 
 interface LivroBiblia {
     abbrev: string;

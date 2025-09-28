@@ -24,20 +24,6 @@ export async function AuthMiddleware(request: NextRequest) {
         return NextResponse.next()
     }
 
-
     return NextResponse.next()
-
-
-    // if (isProtectedRoute && !isPublicRoute) {
-    //     if (!token || !(await verifyAccessToken(token))) {
-    //         const loginUrl = new URL('/admin/login', request.url)
-    //         loginUrl.searchParams.set('from', pathname)
-    //         return NextResponse.redirect(loginUrl)
-    //     }
-    // }
-
-    // if (isPublicRoute && token && (await verifyAccessToken(token))) {
-    //     return NextResponse.redirect(new URL('/admin', request.url))
-    // }
 
 }

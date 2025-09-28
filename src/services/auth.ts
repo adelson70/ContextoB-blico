@@ -2,12 +2,9 @@
 
 import bcrypt from "bcryptjs";
 import { prisma } from "@/src/lib/prisma";
-import { setAuthCookies } from "../util/jwt.util";
-
+import { setAuthCookies, clearAuthCookies } from "../util/jwt.util";
 
 export async function login(email: string, senha: string) {
-
-
     if (!email) throw Error('Email não informado')
     if (!senha) throw Error('Senha não informado')
 
@@ -29,4 +26,8 @@ export async function login(email: string, senha: string) {
 
     await setAuthCookies(payload)
 
+}
+
+export function logout() {
+    return clearAuthCookies()
 }

@@ -213,6 +213,15 @@ export default function ReferenciaModal({ isOpen, onClose, onSuccess }: Referenc
     }
 
     const versiculoTexto = versiculos[parseInt(versiculoReferencia.value) - 1];
+    const referenciaTexto = `${livroReferencia.label} ${capituloReferencia.value}:${versiculoReferencia.value}`;
+    
+    // Verificar se a referência já existe
+    const jaExiste = referencias.some(ref => ref.referencia === referenciaTexto);
+    if (jaExiste) {
+      toast.error("Esta referência já existe para este versículo");
+      return;
+    }
+
     setReferenciaParaAdicionar({
       livro: livroReferencia.label,
       livroSlug: livroReferencia.value,
@@ -228,6 +237,15 @@ export default function ReferenciaModal({ isOpen, onClose, onSuccess }: Referenc
       return;
     }
 
+    // Verificar se a referência já existe na lista atual
+    const referenciaTexto = `${referenciaParaAdicionar.livro} ${referenciaParaAdicionar.capitulo}:${referenciaParaAdicionar.versiculo}`;
+    const jaExiste = referencias.some(ref => ref.referencia === referenciaTexto);
+    
+    if (jaExiste) {
+      toast.error("Esta referência já existe para este versículo");
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await fetch('/api/referencias', {
@@ -239,12 +257,20 @@ export default function ReferenciaModal({ isOpen, onClose, onSuccess }: Referenc
           livroSlug: versiculoBase.livroSlug,
           capitulo: versiculoBase.capitulo,
           versiculo: versiculoBase.versiculo,
-          referencia: `${referenciaParaAdicionar.livro} ${referenciaParaAdicionar.capitulo}:${referenciaParaAdicionar.versiculo}`
+          referencia: referenciaTexto
         })
       });
 
       if (!response.ok) {
-        throw new Error('Erro ao adicionar referência');
+        const errorData = await response.json();
+        
+        // Verificar se é erro de referência duplicada
+        if (response.status === 409 && errorData.code === 'DUPLICATE_REFERENCE') {
+          toast.error("Esta referência já existe para este versículo");
+          return;
+        }
+        
+        throw new Error(errorData.error || 'Erro ao adicionar referência');
       }
 
       // Recarregar a lista de referências
@@ -264,7 +290,7 @@ export default function ReferenciaModal({ isOpen, onClose, onSuccess }: Referenc
       toast.success("Referência adicionada com sucesso!");
     } catch (error) {
       console.error("Erro ao adicionar referência:", error);
-      toast.error("Erro ao adicionar referência");
+      toast.error(error instanceof Error ? error.message : "Erro ao adicionar referência");
     } finally {
       setLoading(false);
     }
@@ -610,9 +636,26 @@ export default function ReferenciaModal({ isOpen, onClose, onSuccess }: Referenc
                   <button
                     onClick={prepararReferenciaParaAdicionar}
                     disabled={!livroReferencia || !capituloReferencia || !versiculoReferencia}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className={`px-4 py-2 text-white rounded-md transition-colors ${
+                      !livroReferencia || !capituloReferencia || !versiculoReferencia
+                        ? 'bg-gray-400 cursor-not-allowed'
+                        : (() => {
+                            const referenciaTexto = `${livroReferencia?.label || ''} ${capituloReferencia?.value || ''}:${versiculoReferencia?.value || ''}`;
+                            const jaExiste = referencias.some(ref => ref.referencia === referenciaTexto);
+                            return jaExiste 
+                              ? 'bg-red-600 hover:bg-red-700' 
+                              : 'bg-blue-600 hover:bg-blue-700';
+                          })()
+                    }`}
                   >
-                    Preparar Referência
+                    {(() => {
+                      if (!livroReferencia || !capituloReferencia || !versiculoReferencia) {
+                        return 'Preparar Referência';
+                      }
+                      const referenciaTexto = `${livroReferencia.label} ${capituloReferencia.value}:${versiculoReferencia.value}`;
+                      const jaExiste = referencias.some(ref => ref.referencia === referenciaTexto);
+                      return jaExiste ? 'Referência Já Existe' : 'Preparar Referência';
+                    })()}
                   </button>
                 </div>
               </div>

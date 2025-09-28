@@ -31,6 +31,26 @@ export async function getReferenciasByCapitulo(livroSlug: string, capitulo: numb
   });
 }
 
+// Verifica se uma referência já existe
+export async function verificarReferenciaExistente(data: {
+  livroSlug: string;
+  capitulo: number;
+  versiculo: number;
+  referencia: string;
+}) {
+  const referenciaExistente = await prisma.referencia.findFirst({
+    where: {
+      livroSlug: data.livroSlug,
+      capitulo: data.capitulo,
+      versiculo: data.versiculo,
+      referencia: data.referencia,
+      isDeleted: false
+    }
+  });
+  
+  return !!referenciaExistente;
+}
+
 // Cria uma nova referência
 export async function createReferencia(data: {
   livroSlug: string;
@@ -38,6 +58,12 @@ export async function createReferencia(data: {
   versiculo: number;
   referencia: string;
 }) {
+  // Verificar se a referência já existe
+  const jaExiste = await verificarReferenciaExistente(data);
+  if (jaExiste) {
+    throw new Error('Esta referência já existe para este versículo');
+  }
+
   return prisma.referencia.create({
     data: {
       livroSlug: data.livroSlug,

@@ -39,6 +39,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(novaReferencia);
   } catch (error) {
     console.error('Erro ao criar referência:', error);
+    
+    // Verificar se é erro de referência duplicada
+    if (error instanceof Error && error.message === 'Esta referência já existe para este versículo') {
+      return NextResponse.json({ 
+        error: 'Esta referência já existe para este versículo',
+        code: 'DUPLICATE_REFERENCE'
+      }, { status: 409 });
+    }
+    
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 });
   }
 }

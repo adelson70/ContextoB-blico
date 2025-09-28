@@ -114,32 +114,30 @@ export class DashboardService {
     trintaDiasAtras.setDate(hoje.getDate() - 30);
     trintaDiasAtras.setHours(0, 0, 0, 0);
 
-    // Buscar dados agrupados por dia
-    const dadosDiarios = await prisma.$queryRaw<Array<{
-      data: Date;
-      total: bigint;
-    }>>`
-      SELECT 
-        DATE("createdAt") as data,
-        COUNT(*)::bigint as total
-      FROM pesquisas 
-      WHERE "createdAt" >= ${trintaDiasAtras}
-      GROUP BY DATE("createdAt")
-      ORDER BY data ASC
-    `;
+    // Buscar todos os registros dos últimos 30 dias
+    const registros = await prisma.pesquisa.findMany({
+      where: {
+        createdAt: {
+          gte: trintaDiasAtras
+        }
+      },
+      select: {
+        createdAt: true
+      }
+    });
+
+    // Agrupar por data
+    const dadosMap = new Map<string, number>();
+    
+    registros.forEach(registro => {
+      const dataStr = registro.createdAt.toISOString().split('T')[0];
+      dadosMap.set(dataStr, (dadosMap.get(dataStr) || 0) + 1);
+    });
 
     // Criar array com todos os dias dos últimos 30 dias
     const labels: string[] = [];
     const data: number[] = [];
-    const dadosMap = new Map();
 
-    // Mapear os dados existentes
-    dadosDiarios.forEach(item => {
-      const dataStr = item.data.toISOString().split('T')[0];
-      dadosMap.set(dataStr, Number(item.total));
-    });
-
-    // Preencher todos os dias dos últimos 30 dias
     for (let i = 29; i >= 0; i--) {
       const dataAtual = new Date(hoje);
       dataAtual.setDate(dataAtual.getDate() - i);

@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma"
+import { prisma } from "@/src/lib/prisma"
 
 export const pesquisaBiblica = async (nome_livro: string, capitulo_livro: string, ip: string) => {
     await prisma.pesquisa.create({

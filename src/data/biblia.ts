@@ -41,8 +41,8 @@ export function getNextChapter(slug: string, capitulo: number | string): { slug:
 export function getMenuPath(): string {
   return '/';
 }
-import { getComentarioByVersiculo } from '@/services/comentarioService';
-import { getReferenciaByVersiculo } from '@/services/referenciaService';
+import { getComentarioByVersiculo } from '@/src/services/comentarioService';
+import { getReferenciaByVersiculo } from '@/src/services/referenciaService';
 
 /**
  * Busca comentário no banco de dados para um versículo específico.

@@ -3,7 +3,7 @@
 
 import React, { useState } from "react";
 import { BibleSearchInput } from "./components/biblia-input";
-import { validateBookAndChapter } from "@/data/biblia";
+import { validateBookAndChapter } from "@/src/data/biblia";
 import { useRouter } from "next/navigation";
 
 // Página principal com fundo gradiente sofisticado e centralização

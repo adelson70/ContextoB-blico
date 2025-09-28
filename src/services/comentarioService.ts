@@ -4,7 +4,7 @@ export async function getComentarioByVersiculo(livroSlug: string, capitulo: numb
     where: { livroSlug, capitulo, versiculo },
   });
 }
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/src/lib/prisma';
 
 // Service: lógica de acesso ao banco
 export async function getComentariosByCapitulo(livroSlug: string, capitulo: number) {

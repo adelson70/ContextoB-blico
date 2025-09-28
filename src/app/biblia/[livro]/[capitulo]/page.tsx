@@ -1,9 +1,9 @@
-import { pesquisaBiblica } from '@/services/pesquisaBiblica';
+import { pesquisaBiblica } from '@/src/services/pesquisaBiblica';
 import { headers } from 'next/headers';
-import { getVersiculos, validateBookAndChapter, getReferencias, getComentario, getPreviousChapter, getNextChapter, getMenuPath } from '@/data/biblia';
+import { getVersiculos, validateBookAndChapter, getReferencias, getComentario, getPreviousChapter, getNextChapter, getMenuPath } from '@/src/data/biblia';
 import { ArrowLeft, ArrowRight, HomeIcon } from 'lucide-react';
 import { notFound } from 'next/navigation';
-import { VerseBlock } from '@components/verse-block/index';
+import { VerseBlock } from '@/src/app/components/verse-block/index';
 
 interface BibliaPageProps {
   params: { livro: string; capitulo: string };

@@ -5,7 +5,7 @@ export async function getReferenciaByVersiculo(livroSlug: string, capitulo: numb
     orderBy: { id: 'asc' },
   });
 }
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/src/lib/prisma';
 
 // Service: lógica de acesso ao banco
 export async function getReferenciasByCapitulo(livroSlug: string, capitulo: number) {

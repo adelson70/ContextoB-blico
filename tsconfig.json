@@ -20,9 +20,9 @@
       }
     ],
     "paths": {
-      "@components/*": ["./app/components/*"],
-      "@biblia/*": ["./data/biblia-nvi.json"],
-      "@biblia-util/*": ["data/biblia.ts"],
+      "@components/*": ["src/app/components/*"],
+      "@biblia/*": ["src/data/biblia-nvi.json"],
+      "@biblia-util/*": ["src/data/biblia.ts"],
       "@/*": ["./*"]
     }
   },

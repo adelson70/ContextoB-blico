@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getAccessTokenFromCookies, getRefreshTokenFromCookies } from '@/util/jwt.util'
+import { getAccessTokenFromCookies, getRefreshTokenFromCookies } from '@/src/util/jwt.util'
 
 
 export async function AuthMiddleware(req: NextRequest) {

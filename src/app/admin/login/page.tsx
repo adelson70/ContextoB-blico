@@ -1,15 +1,21 @@
 "use client";
 
 import React, { useState } from "react";
+import { login } from "@/src/services/auth";
+import { toast } from "react-toastify";
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log({ email, senha });
-    // aqui você pode chamar sua API de autenticação
+    await login(email, senha)
+      .catch(error => {
+        console.log('aqui')
+        toast.error(error.message)
+      })
   };
 
   return (

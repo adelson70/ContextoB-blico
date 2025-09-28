@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { getVersiculos } from "@/src/data/biblia";
 import { X, BookOpen } from "lucide-react";
 
@@ -13,8 +14,13 @@ interface ResultadoPesquisaModalProps {
 
 export default function ResultadoPesquisaModal({ isOpen, onClose, livro, capitulo }: ResultadoPesquisaModalProps) {
   const [versiculoSelecionado, setVersiculoSelecionado] = useState<number | null>(null);
-  
-  if (!isOpen) return null;
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!isOpen || !mounted) return null;
 
   const versiculos = getVersiculos(livro, capitulo);
   const nomeLivro = livro.charAt(0).toUpperCase() + livro.slice(1).replace(/-/g, ' ');
@@ -23,8 +29,8 @@ export default function ResultadoPesquisaModal({ isOpen, onClose, livro, capitul
     setVersiculoSelecionado(versiculoSelecionado === index ? null : index);
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/40" role="dialog" aria-modal="true">
+  const modalContent = (
+    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/40" role="dialog" aria-modal="true" style={{ zIndex: 9999 }}>
       <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl max-w-5xl w-[98vw] max-h-[95vh] p-6 relative animate-fade-in overflow-hidden">
         <button
           className="absolute top-4 right-4 text-2xl text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none z-10"
@@ -99,4 +105,6 @@ export default function ResultadoPesquisaModal({ isOpen, onClose, livro, capitul
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }

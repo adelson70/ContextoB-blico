@@ -189,9 +189,9 @@ body {
   padding-top: 0;
 }
 
-/* Navbar com z-index alto para ficar acima da scrollbar */
+/* Navbar com z-index baixo para não sobrepor modais */
 nav.sticky {
-  z-index: 20;
+  z-index: 10;
   position: sticky;
   top: 0;
 }
@@ -205,6 +205,11 @@ main {
 /* Modais e overlays com z-index alto */
 .modal, .overlay {
   z-index: 50;
+}
+
+/* Modal de pesquisa admin com z-index muito alto */
+[role="dialog"] {
+  z-index: 9999 !important;
 }
 
 /* Garantir que a scrollbar não sobreponha a navbar */

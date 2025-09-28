@@ -56,6 +56,8 @@ export default function PesquisaAdmin() {
       backgroundColor: 'white',
       border: 'none',
       boxShadow: 'none',
+      minHeight: '36px',
+      height: '36px',
       '&:hover': {
         border: 'none'
       }
@@ -79,16 +81,16 @@ export default function PesquisaAdmin() {
 
   return (
     <>
-      <div className="w-full max-w-2xl mx-auto bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
-        <h2 className="text-2xl font-bold mb-4 text-center text-gray-900 dark:text-white">
+      <div className="w-full max-w-4xl mx-auto bg-white dark:bg-slate-800 rounded-xl shadow-lg p-4 border border-gray-200 dark:border-gray-700">
+        <h2 className="text-xl font-bold mb-2 text-center text-gray-900 dark:text-white">
           Pesquisa Bíblica (Admin)
         </h2>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 text-center">
+        <p className="text-xs text-gray-600 dark:text-gray-400 mb-4 text-center">
           Esta pesquisa não será contabilizada nas estatísticas
         </p>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <div>
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-4 mb-4">
+          <div className="md:col-span-3">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Livro
             </label>
@@ -104,7 +106,7 @@ export default function PesquisaAdmin() {
             />
           </div>
 
-          <div>
+          <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Capítulo
             </label>
@@ -120,25 +122,27 @@ export default function PesquisaAdmin() {
               classNamePrefix="react-select"
             />
           </div>
-        </div>
 
-        <button
-          onClick={handlePesquisar}
-          disabled={loading || !livroSelecionado || !capituloSelecionado}
-          className="w-full px-4 py-3 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-        >
-          {loading ? (
-            <>
-              <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Pesquisando...
-            </>
-          ) : (
-            "Pesquisar"
-          )}
-        </button>
+          <div className="flex items-end">
+            <button
+              onClick={handlePesquisar}
+              disabled={loading || !livroSelecionado || !capituloSelecionado}
+              className="w-full px-4 h-9 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+            >
+              {loading ? (
+                <>
+                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Pesquisando...
+                </>
+              ) : (
+                "Pesquisar"
+              )}
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Modal de Resultado */}

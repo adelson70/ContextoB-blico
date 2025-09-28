@@ -91,10 +91,11 @@ export async function clearAuthCookies(): Promise<void> {
 export async function getAuthPayload(): Promise<AuthPayload | null> {
     const cookieStore = await cookies();
     const accessToken = cookieStore.get('jat')?.value;
+    const refresh_token = cookieStore.get('jrt')?.value;
     
-    if (!accessToken) {
+    if (!accessToken || !refresh_token) {
         return null;
     }
     
-    return verifyAccessToken(accessToken);
+    return verifyAccessToken(accessToken || refresh_token);
 }

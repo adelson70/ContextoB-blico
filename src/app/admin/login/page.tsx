@@ -3,15 +3,20 @@
 import React, { useState } from "react";
 import { login } from "@/src/services/auth";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await login(email, senha)
+      .then(()=>{
+        router.push('/admin')
+      })
       .catch(error => {
         console.log('aqui')
         toast.error(error.message)

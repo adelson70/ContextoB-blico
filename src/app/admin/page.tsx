@@ -1,7 +1,11 @@
 "use client";
 
+import NavBar from "./components/navbar";
+
 export default function Dashboard() {
   return (
-    <div>ola</div>
+    <div>
+      <NavBar />
+    </div>
   )
 }

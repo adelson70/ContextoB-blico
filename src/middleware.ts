@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server'
 import { ipLogger } from './app/middleware/ipLogger'
 import { AuthMiddleware } from './app/middleware/auth'
+export const runtime = 'nodejs'
 
 export function middleware(req: NextRequest) {
 

@@ -34,14 +34,14 @@ function convertTimeToMs(time: string): number {
 
 // --- Lógica Pura de JWT ---
 
-function generateAccessToken(payload: { userId: number }): string {
+export function generateAccessToken(payload: { userId: number }): string {
     return jwt.sign(payload, JWT_CONFIG.access.secret, {
         // Correção aplicada: `as any` para contornar o problema de tipagem da biblioteca
         expiresIn: JWT_CONFIG.access.expiresIn as any,
     });
 }
 
-function generateRefreshToken(payload: { userId: number }): string {
+export function generateRefreshToken(payload: { userId: number }): string {
     return jwt.sign(payload, JWT_CONFIG.refresh.secret, {
         // Correção aplicada: `as any` para contornar o problema de tipagem da biblioteca
         expiresIn: JWT_CONFIG.refresh.expiresIn as any,
@@ -51,6 +51,15 @@ function generateRefreshToken(payload: { userId: number }): string {
 export function verifyAccessToken(token: string): AuthPayload | null {
     try {
         return jwt.verify(token, JWT_CONFIG.access.secret) as AuthPayload;
+    } catch (error) {
+        console.log('error', error)
+        return null;
+    }
+}
+
+export function verifyRefreshToken(token: string): AuthPayload | null {
+    try {
+        return jwt.verify(token, JWT_CONFIG.refresh.secret) as AuthPayload;
     } catch (error) {
         return null;
     }

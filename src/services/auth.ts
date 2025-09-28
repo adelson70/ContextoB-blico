@@ -28,6 +28,6 @@ export async function login(email: string, senha: string) {
 
 }
 
-export function logout() {
-    return clearAuthCookies()
+export async function logout() {
+    return await clearAuthCookies()
 }
